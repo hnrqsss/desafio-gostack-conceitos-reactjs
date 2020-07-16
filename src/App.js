@@ -1,29 +1,29 @@
 import React from "react";
 
+import Repository from './components/Repository';
 import "./styles.css";
+import useRepositories from "./hooks/useRepositories";
 
 function App() {
-  async function handleAddRepository() {
-    // TODO
-  }
 
-  async function handleRemoveRepository(id) {
-    // TODO
-  }
+  const { 
+    repositories,
+    handleAddRepository,
+    handleRemoveRepository,
+  } = useRepositories()
 
+  
   return (
     <div>
       <ul data-testid="repository-list">
-        <li>
-          Repositório 1
-
-          <button onClick={() => handleRemoveRepository(1)}>
-            Remover
-          </button>
-        </li>
+          {repositories.map(repository => <Repository 
+              repository={repository} 
+              key={repository.id}
+              removeRepository={handleRemoveRepository}
+          />)}
       </ul>
 
-      <button onClick={handleAddRepository}>Adicionar</button>
+      <button onClick={(data) => handleAddRepository(data)}>Adicionar</button>
     </div>
   );
 }
