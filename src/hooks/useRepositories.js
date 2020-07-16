@@ -6,13 +6,16 @@ export default function useRepositories() {
     const [ repositories, setRepositories ] = React.useState([])
 
     React.useEffect(() => {
+
+        async function fetchRepositories() {
+            const { data } = await api.get('/repositories')
+            setRepositories(data || [])
+        }
+
         fetchRepositories()
     }, [])
 
-    async function fetchRepositories() {
-        const { data } = api.get('/repositories')
-        setRepositories(data || [])
-    }
+    
 
     async function handleAddRepository(repo) {
         const { data } = await api.post('/repositories', repo)        
@@ -20,9 +23,15 @@ export default function useRepositories() {
     }
     
     async function handleRemoveRepository(id) {
+        
+        console.log('repo', id)
+
+        const repos = repositories.find(repository => repository.id !== id) || []
+
+        setRepositories(repos)
+        
         await api.delete(`/repositories/${id}`)
-        fetchRepositories()
-    }
+    }   
 
     
     return {
